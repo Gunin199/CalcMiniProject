@@ -2,7 +2,7 @@ pipeline {
    	agent any
    	environment {
    	    dockerhubCredentials = credentials("my_docker_hub_credentials")
-   	    imageName = "guninjain/my-calc-app"
+   	    imageName = 'guninjain/my-calc-app'
    	}
 
     stages {
@@ -39,14 +39,14 @@ pipeline {
         {
             steps{
                 script{
-                    sh 'docker ps | awk '{print $1,$2 }' | grep ${imageName} | awk '{print $1}' | xargs -I {} docker stop {} '
+                    sh "docker ps | awk '{print \$1,\$2 }' | grep ${imageName} | awk '{print \$1}' | xargs -I {} docker stop {} "
                 }
             }
         }
         stage('Remove containers of previous app versions'){
             steps{
                 script{
-                    sh 'docker ps -a | awk '{ print $1,$2 }' | grep ${imageName} | awk '{print $1 }' | xargs -I {} docker rm {}'
+                    sh "docker ps -a | awk '{ print \$1,\$2 }' | grep ${imageName} | awk '{print \$1 }' | xargs -I {} docker rm {}"
                 }
 
             }
