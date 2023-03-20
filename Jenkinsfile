@@ -49,7 +49,7 @@ pipeline {
         stage('Remove images of previous app versions')
         {
             steps{
-                sh 'docker rmi $(docker images --format '{{.Repository}}:{{.Tag}}' | grep ${imageName})'
+                sh 'docker rmi $(docker images --format '\{\{.Repository\}\}:\{\{.Tag\}\}' | grep ${imageName})'
             }
         }
         stage('Deploy using Ansible')
