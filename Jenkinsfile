@@ -1,7 +1,7 @@
 pipeline {
    	agent any
    	environment {
-   	    dockerhubCredentials = credentials("my_docker_hub_credentials")
+   	    dockerhubCredentials = "my_docker_hub_credentials"
    	    imageName = 'guninjain/my-calc-app'
    	}
 
@@ -28,7 +28,7 @@ pipeline {
 
         stage('Publish Docker Images') {
             steps {
-                withDockerRegistry([ credentialsId: "dockerhubCredentials", url: "" ]) {
+                docker.withRegistry([ credentialsId: dockerhubCredentials, url: "" ]) {
                     sh 'docker push ${imageName}:${BUILD_NUMBER}'
                 }
 
