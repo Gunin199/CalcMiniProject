@@ -10,13 +10,13 @@ pipeline {
             steps {
                 // Get code from the GitHub repository
 				git url: 'https://github.com/Gunin199/CalcMiniProject.git',
-				branch: 'main',
-                credentialsId: 'github_secret_text'
+				branch: 'main'
+//                 credentialsId: 'github_secret_text'
             }
         }
         stage('Maven Build and Test') {
             steps {
-                // Maven build, 'sh' specifies it is a shell command
+                // Maven build,compile,test and install, 'sh' specifies it is a shell command
                 sh 'mvn clean install'
             }
         }
@@ -28,11 +28,13 @@ pipeline {
 
         stage('Publish Docker Images') {
             steps {
-//                 withDockerRegistry([ credentialsId: "dockerid", url: "" ]) {
-//                     sh 'docker push guninjain/my-calc-app:${BUILD_NUMBER}'
-//                 }
-                   sh 'echo $dockerhubCredentials_PSW | docker login -u $dockerhubCredentials_USR --password-stdin'
-                   sh 'docker push ${imageName}:${BUILD_NUMBER}'
+                withDockerRegistry([ credentialsId: "dockerhubCredentials", url: "" ]) {
+                    sh 'docker push ${imageName}:${BUILD_NUMBER}'
+                }
+
+// Another way to do the same thing
+//                    sh 'echo $dockerhubCredentials_PSW | docker login -u $dockerhubCredentials_USR --password-stdin'
+//                    sh 'docker push ${imageName}:${BUILD_NUMBER}'
             }
         }
         stage('Stop containers of previous app versions')
@@ -64,14 +66,17 @@ pipeline {
         {
             steps
             {
-//                 ansiblePlaybook becomeUser: 'null',
-//                                 colorized: true,
-//                                 installation: 'Ansible',
-//                                 inventory: 'inventory',
-//                                 playbook: 'playbook.yml',
-//                                 sudoUser: 'null',
+                ansiblePlaybook becomeUser: 'null',
+                                colorized: true,
+                                installation: 'Ansible',
+                                inventory: 'inventory',
+                                playbook: 'playbook.yml',
+                                sudoUser: 'null',
+                                extraVars: [
+                                        build_num: ${BUILD_NUMBER}
+                                ],
 //
-                sh 'ansible-playbook playbook.yml -i inventory --extra-vars \"build_num=${BUILD_NUMBER}\"'
+//                 sh 'ansible-playbook playbook.yml -i inventory --extra-vars \"build_num=${BUILD_NUMBER}\"'
             }
         }
     }
