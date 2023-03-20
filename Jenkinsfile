@@ -2,6 +2,7 @@ pipeline {
    	agent any
    	environment {
    	    DockerhubCredentials = credentials("my_docker_hub_credentials")
+   	    imageName = guninjain/my-calc-app
    	}
 
     stages {
@@ -21,7 +22,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t guninjain/my-calc-app:$BUILD_NUMBER .'
+                sh 'docker build -t $imageName:$BUILD_NUMBER .'
             }
         }
 
@@ -31,12 +32,26 @@ pipeline {
 //                     sh 'docker push guninjain/my-calc-app:${BUILD_NUMBER}'
 //                 }
                    sh 'echo $DockerhubCredentials_PSW | docker login -u $DockerhubCredentials_USR --password-stdin'
-                   sh 'docker push guninjain/my-calc-app:${BUILD_NUMBER}'
+                   sh 'docker push ${imageName}:${BUILD_NUMBER}'
             }
         }
-//         stage('Remove existing images'){
-//             sh 'docker rmi guninjain/my-calc-app'
-//         }
+        stage('Stop containers of previous app versions')
+        {
+            steps{
+                sh 'docker ps | awk '{print $1,$2 }' | grep ${imageName} | awk '{print $1}' | xargs -I {} docker stop {} '
+            }
+        }
+        stage('Remove containers of previous app versions'){
+            steps{
+                sh 'docker ps -a | awk '{ print $1,$2 }' | grep ${imageName} | awk '{print $1 }' | xargs -I {} docker rm {}'
+            }
+        }
+        stage('Remove images of previous app versions')
+        {
+            steps{
+                sh 'docker rmi $(docker images --format '{{.Repository}}:{{.Tag}}' | grep ${imageName})'
+            }
+        }
         stage('Deploy using Ansible')
         {
             steps
