@@ -28,8 +28,9 @@ pipeline {
         stage('Publish Docker Images') {
             steps {
                 script{
-                    docker.withRegistry([ credentialsId: dockerhubCredentials, url: "" ]) {
-                                    sh 'docker push ${imageName}:${BUILD_NUMBER}'
+                    withCredentials([usernamePassword(credentialsId: dockerhubCredentials, passwordVariable: 'dockerHubPwd', usernameVariable : 'dockerHubUname') ]) {
+                          sh "docker login -u ${env.dockerHubUname} -p ${env.dockerHubPwd}"
+                          sh 'docker push ${imageName}:${BUILD_NUMBER}'
                     }
                 }
 
