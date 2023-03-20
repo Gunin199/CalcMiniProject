@@ -41,12 +41,14 @@ pipeline {
         {
             steps
             {
-                ansiblePlaybook becomeUser: 'null',
-                                colorized: true,
-                                installation: 'Ansible',
-                                inventory: 'inventory',
-                                playbook: 'playbook.yml',
-                                sudoUser: 'null'
+//                 ansiblePlaybook becomeUser: 'null',
+//                                 colorized: true,
+//                                 installation: 'Ansible',
+//                                 inventory: 'inventory',
+//                                 playbook: 'playbook.yml',
+//                                 sudoUser: 'null',
+//
+                sh 'ansible-playbook playbook.yml -i inventory --extra-vars \"build_num=${BUILD_NUMBER}\"'
             }
         }
     }
