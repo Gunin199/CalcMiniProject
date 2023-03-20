@@ -1,8 +1,8 @@
 pipeline {
    	agent any
    	environment {
-   	    DockerhubCredentials = credentials("my_docker_hub_credentials")
-   	    imageName = guninjain/my-calc-app
+   	    dockerhubCredentials = credentials("my_docker_hub_credentials")
+   	    imageName = "guninjain/my-calc-app"
    	}
 
     stages {
@@ -31,7 +31,7 @@ pipeline {
 //                 withDockerRegistry([ credentialsId: "dockerid", url: "" ]) {
 //                     sh 'docker push guninjain/my-calc-app:${BUILD_NUMBER}'
 //                 }
-                   sh 'echo $DockerhubCredentials_PSW | docker login -u $DockerhubCredentials_USR --password-stdin'
+                   sh 'echo $dockerhubCredentials_PSW | docker login -u $dockerhubCredentials_USR --password-stdin'
                    sh 'docker push ${imageName}:${BUILD_NUMBER}'
             }
         }
