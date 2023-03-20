@@ -74,7 +74,7 @@ pipeline {
                                 sudoUser: 'null',
                                 extraVars: [
                                         build_num: ${BUILD_NUMBER}
-                                ],
+                                ]
 //
 //                 sh 'ansible-playbook playbook.yml -i inventory --extra-vars \"build_num=${BUILD_NUMBER}\"'
             }
