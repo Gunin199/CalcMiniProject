@@ -34,6 +34,21 @@ pipeline {
                    sh 'docker push guninjain/my-calc-app:${BUILD_NUMBER}'
             }
         }
+//         stage('Remove existing images'){
+//             sh 'docker rmi guninjain/my-calc-app'
+//         }
+        stage('Deploy using Ansible')
+        {
+            steps
+            {
+                ansiblePlaybook becomeUser: 'null',
+                                colorized: true,
+                                installation: 'Ansible',
+                                inventory: 'inventory',
+                                playbook: 'playbook.yml',
+                                sudoUser: 'null'
+            }
+        }
     }
 
     //
