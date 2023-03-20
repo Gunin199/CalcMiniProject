@@ -38,18 +38,26 @@ pipeline {
         stage('Stop containers of previous app versions')
         {
             steps{
-                sh 'docker ps | awk '{print $1,$2 }' | grep ${imageName} | awk '{print $1}' | xargs -I {} docker stop {} '
+                script{
+                    sh 'docker ps | awk '{print $1,$2 }' | grep ${imageName} | awk '{print $1}' | xargs -I {} docker stop {} '
+                }
             }
         }
         stage('Remove containers of previous app versions'){
             steps{
-                sh 'docker ps -a | awk '{ print $1,$2 }' | grep ${imageName} | awk '{print $1 }' | xargs -I {} docker rm {}'
+                script{
+                    sh 'docker ps -a | awk '{ print $1,$2 }' | grep ${imageName} | awk '{print $1 }' | xargs -I {} docker rm {}'
+                }
+
             }
         }
         stage('Remove images of previous app versions')
         {
             steps{
-                sh 'docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}" | grep ${imageName})'
+                script{
+                    sh 'docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}" | grep ${imageName})'
+                }
+
             }
         }
         stage('Deploy using Ansible')
