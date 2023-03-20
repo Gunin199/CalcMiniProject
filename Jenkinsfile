@@ -11,7 +11,6 @@ pipeline {
                 // Get code from the GitHub repository
 				git url: 'https://github.com/Gunin199/CalcMiniProject.git',
 				branch: 'main'
-//                 credentialsId: 'github_secret_text'
             }
         }
         stage('Maven Build and Test') {
@@ -28,9 +27,12 @@ pipeline {
 
         stage('Publish Docker Images') {
             steps {
-                docker.withRegistry([ credentialsId: dockerhubCredentials, url: "" ]) {
-                    sh 'docker push ${imageName}:${BUILD_NUMBER}'
+                script{
+                    docker.withRegistry([ credentialsId: dockerhubCredentials, url: "" ]) {
+                                    sh 'docker push ${imageName}:${BUILD_NUMBER}'
+                    }
                 }
+
 
 // Another way to do the same thing
 //                    sh 'echo $dockerhubCredentials_PSW | docker login -u $dockerhubCredentials_USR --password-stdin'
