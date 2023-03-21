@@ -43,6 +43,7 @@ public class Calculator {
             switch (choice) {
                 case 1:
                     do {
+                        System.out.println("\nFactorial");
                         System.out.print("\nEnter a non-negative integer: ");
                         try {
                             num1 = sc.nextInt();
@@ -63,6 +64,7 @@ public class Calculator {
                     break;
                 case 2:
                     do {
+                        System.out.println("\nSquare root");
                         System.out.print("\nEnter a non-negative number: ");
                         try {
                             num2 = sc.nextDouble();
@@ -80,7 +82,8 @@ public class Calculator {
                     break;
                 case 3:
                     do {
-                        System.out.print("\nEnter a non-negative integer: ");
+                        System.out.println("\nNatural log(base e)");
+                        System.out.print("\nEnter a positive number: ");
                         try{
                             num2 = sc.nextDouble();
                             res2 = calc.naturalLog(num2);
@@ -97,6 +100,7 @@ public class Calculator {
                     } while (true);
                     break;
                 case 4:
+                    System.out.println("Power function");
                     double x = Double.NaN,b = Double.NaN;
 
                     while(Double.isNaN(x))
@@ -128,7 +132,7 @@ public class Calculator {
                     System.out.println("\nClosing the application...");
                     break;
                 default:
-                    System.out.println("\nPlease select one of the given options");
+                    System.out.println("\nInvalid choice, Please select one of the given options");
             }
 
 
