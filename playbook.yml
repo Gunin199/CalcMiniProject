@@ -10,5 +10,5 @@
       shell: docker pull guninjain/my-calc-app:{{build_num}}
 
     - name: running container
-      shell: docker run -it -d guninjain/my-calc-app:{{build_num}}
+      shell: docker run -it -d --name CalcDevops guninjain/my-calc-app:{{build_num}}
 
