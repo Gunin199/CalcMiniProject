@@ -1,7 +1,7 @@
 pipeline {
    	agent any
    	environment {
-   	    dockerhubCredentials = "my_docker_hub_credentials"
+   	    dockerhubCredentials = credentials("my_docker_hub_credentials")
    	    imageName = 'guninjain/my-calc-app'
    	}
 
@@ -28,13 +28,16 @@ pipeline {
         stage('Publish Docker Images') {
             steps {
                 script{
-                // less secure way
+//                 // less secure way
 //                     withCredentials([usernamePassword(credentialsId: dockerhubCredentials, passwordVariable: 'dockerHubPwd', usernameVariable : 'dockerHubUname') ]) {
-//                           sh "docker login -u \${env.dockerHubUname} -p \${env.dockerHubPwd}"
+//                         //   sh "docker login -u \${env.dockerHubUname} -p \${env.dockerHubPwd}"
+//                         docker.withRegistry('',dockerhubCredentials){
 //                           sh 'docker push ${imageName}:${BUILD_NUMBER}'
+//                         }
+//
 //                     }
-                   sh 'echo $dockerhubCredentials_PSW | docker login -u $dockerhubCredentials_USR --password-stdin'
-                   sh 'docker push ${imageName}:${BUILD_NUMBER}'
+                  sh 'echo $dockerhubCredentials_PSW | docker login -u $dockerhubCredentials_USR --password-stdin'
+                  sh 'docker push ${imageName}:${BUILD_NUMBER}'
                }
             }
         }
@@ -74,7 +77,7 @@ pipeline {
                                 playbook: 'playbook.yml',
                                 sudoUser: 'null',
                                 extraVars: [
-                                        "build_num: ${BUILD_NUMBER}"
+                                        build_num: '${BUILD_NUMBER}'
                                 ]
 //
 //                 sh 'ansible-playbook playbook.yml -i inventory --extra-vars \"build_num=${BUILD_NUMBER}\"'
