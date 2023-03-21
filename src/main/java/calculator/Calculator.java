@@ -160,11 +160,11 @@ public class Calculator {
 
     public int factorial(int num) {
         int res = 0;
-
+        logger.info("[FACTORIAL] " + num);
         try {
             if (num < 0) {
-                logger.info("[FACTORIAL] [FAILED] " + num);
-                logger.info("[RESULT - FACTORIAL] [INVALID INPUT] -1");
+
+                logger.error("[RESULT - FACTORIAL] [FAILED] [INVALID INPUT] -1");
                 res = -1;
                 throw new IllegalArgumentException("Can't find factorial of negative integer");
             } else {
@@ -177,8 +177,8 @@ public class Calculator {
                     }
                 }
 
-                logger.info("[FACTORIAL] [SUCCESS] " + num);
-                logger.info("[RESULT - FACTORIAL] " + res);
+
+                logger.info("[RESULT - FACTORIAL] [SUCCESS] " + res);
 
             }
         } catch (IllegalArgumentException iae) {
@@ -191,19 +191,19 @@ public class Calculator {
 
     public double squareRoot(double num) {
         double res = 0;
-
+        logger.info("[SQUARE ROOT] " + num);
         try{
             if (num < 0) {
-                logger.info("[SQUARE ROOT] [FAILED] " + num);
-                logger.info("[RESULT - SQUARE ROOT] [INVALID INPUT] -1");
+
+                logger.error("[RESULT - SQUARE ROOT] [FAILED] [INVALID INPUT] -1");
                 res = -1;
                 throw new IllegalArgumentException("Can't find square root of negative numbers");
             }
             else{
                 res = Math.sqrt(num);
 
-                logger.info("[SQUARE ROOT] [SUCCESS] " + num);
-                logger.info("[RESULT - SQUARE ROOT] " + res);
+
+                logger.info("[RESULT - SQUARE ROOT] [SUCCESS] " + res);
             }
         }catch (IllegalArgumentException iae){
             // Message for user
@@ -216,17 +216,16 @@ public class Calculator {
 
     public double naturalLog(double num) {
         double res = 0;
-
+        logger.info("[NATURAL LOG] " + num);
         try {
             if (num <= 0) {
                 res = -1;
-                logger.info("[LOG] [FAILED] " + num);
-                logger.info("[RESULT - LOG] [INVALID INPUT] -1");
+
+                logger.error("[RESULT - LOG] [FAILED] [INVALID INPUT] -1");
                 throw new IllegalArgumentException("Can't find log of non-positive number");
             } else {
                 res = Math.log(num);
-                logger.info("[LOG] [SUCCESS] " + num);
-                logger.info("[RESULT - LOG] " + res);
+                logger.info("[RESULT - LOG] [SUCCESS] " + res);
             }
         } catch (IllegalArgumentException iae) {
             // Message for user
@@ -238,8 +237,8 @@ public class Calculator {
     public double Power(double num1, double num2) {
         double res = Math.pow(num1, num2);
 
-        logger.info("[POWER] [SUCCESS] " + num1 + " " + num2);
-        logger.info("[RESULT - POWER] " + res);
+        logger.info("[POWER] " + num1 + " " + num2);
+        logger.info("[RESULT - POWER] [SUCCESS] " + res);
 
         return res;
     }
