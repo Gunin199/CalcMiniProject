@@ -28,16 +28,14 @@ pipeline {
         stage('Publish Docker Images') {
             steps {
                 script{
-                    withCredentials([usernamePassword(credentialsId: dockerhubCredentials, passwordVariable: 'dockerHubPwd', usernameVariable : 'dockerHubUname') ]) {
-                          sh "docker login -u ${env.dockerHubUname} -p ${env.dockerHubPwd}"
-                          sh 'docker push ${imageName}:${BUILD_NUMBER}'
-                    }
-                }
-
-
-// Another way to do the same thing
-//                    sh 'echo $dockerhubCredentials_PSW | docker login -u $dockerhubCredentials_USR --password-stdin'
-//                    sh 'docker push ${imageName}:${BUILD_NUMBER}'
+                // less secure way
+//                     withCredentials([usernamePassword(credentialsId: dockerhubCredentials, passwordVariable: 'dockerHubPwd', usernameVariable : 'dockerHubUname') ]) {
+//                           sh "docker login -u \${env.dockerHubUname} -p \${env.dockerHubPwd}"
+//                           sh 'docker push ${imageName}:${BUILD_NUMBER}'
+//                     }
+                   sh 'echo $dockerhubCredentials_PSW | docker login -u $dockerhubCredentials_USR --password-stdin'
+                   sh 'docker push ${imageName}:${BUILD_NUMBER}'
+               }
             }
         }
         stage('Stop containers of previous app versions')
@@ -76,7 +74,7 @@ pipeline {
                                 playbook: 'playbook.yml',
                                 sudoUser: 'null',
                                 extraVars: [
-                                        build_num: ${BUILD_NUMBER}
+                                        "build_num: ${BUILD_NUMBER}"
                                 ]
 //
 //                 sh 'ansible-playbook playbook.yml -i inventory --extra-vars \"build_num=${BUILD_NUMBER}\"'
