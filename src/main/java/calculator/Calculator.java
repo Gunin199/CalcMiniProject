@@ -33,6 +33,7 @@ public class Calculator {
                 choice = sc.nextInt();
             } catch (InputMismatchException ime) {
                 System.out.println("\nEnter a valid choice\n");
+                sc.nextLine();
                 continue;
             }
 
